@@ -1,0 +1,566 @@
+<?xml version='1.0'?>
+<robot
+  name="moveo_description">	
+
+  <link
+    name="base_link">
+    <visual>
+      <origin
+        xyz="0 0 .13"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 .13"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/base_link_col.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- dummy link -->
+  <link
+    name="odom">
+   </link>
+
+  <joint
+    name="odom_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="odom" />
+  </joint>
+
+
+  <link
+    name="Link_1">
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Link_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Link_1_col.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_1"
+    type="revolute">
+    <origin
+      xyz="0 -0.2425 .13"
+      rpy="1.5708 9.5417E-17 2.7766" />
+    <parent
+      link="base_link" />
+    <child
+      link="Link_1" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.5707"
+      upper="1.5707"
+      effort="5.0"
+      velocity="1.0" />
+  </joint>
+  <link
+    name="Link_2">
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Link_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Link_2_col.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_2"
+    type="revolute">
+    <origin
+      xyz="0 0.18264 0"
+      rpy="-3.1416 0.95134 1.5708" />
+    <parent
+      link="Link_1" />
+    <child
+      link="Link_2" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-1.5707"
+      upper="1.5707"
+      effort="5.0"
+      velocity="1.0" />
+  </joint>
+  <link
+    name="Link_3">
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Link_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Link_3_col.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_3"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.22112"
+      rpy="-3.1416 0.98126 -3.1416" />
+    <parent
+      link="Link_2" />
+    <child
+      link="Link_3" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="-1.5707"
+      upper="1.5707"
+      effort="5.0"
+      velocity="1.0" />
+  </joint>
+  <link
+    name="Link_4">
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Link_4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.29412 0.29412 0.29412 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Link_4_col.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_4"
+    type="revolute">
+    <origin
+      xyz="0.16988 -0.00099213 0"
+      rpy="3.1416 -1.2279 1.5708" />
+    <parent
+      link="Link_3" />
+    <child
+      link="Link_4" />
+    <axis
+      xyz="0.010353 -0.99993 -0.0059382" />
+    <limit
+      lower="-1.5707"
+      upper="1.5707"
+      effort="5.0"
+      velocity="1.0" />
+  </joint>
+  <link
+    name="Link_5">
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Link_5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Link_5_col.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_5"
+    type="revolute">
+    <origin
+      xyz="-0.0021346 0.053041 0.0016936"
+      rpy="-1.5639 -0.091135 -0.00062919" />
+    <parent
+      link="Link_4" />
+    <child
+      link="Link_5" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.5707"
+      upper="1.5707"
+      effort="5.0"
+      velocity="1.0" />
+  </joint>
+  <link
+    name="Gripper_Servo_Gear">
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Gripper_Servo_Gear.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.9098 0.44314 0.031373 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Gripper_Servo_Gear_col.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Gripper_Servo_Gear_Joint"
+    type="revolute">
+    <origin
+      xyz="-0.05013 0.01413 0.041516"
+      rpy="0.9321 0.032705 -1.5268" />
+    <parent
+      link="Link_5" />
+    <child
+      link="Gripper_Servo_Gear" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="1.5707"
+      effort="5.0"
+      velocity="1.0" />
+  </joint>
+  <link
+    name="Tip_Gripper_Servo">
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Tip_Gripper_Servo.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.6 1 0.27843 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Tip_Gripper_Servo_col.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Tip_Gripper_Servo_Joint"
+    type="continuous">
+    <origin
+      xyz="-0.039906 -0.004 -0.0027473"
+      rpy="-3.1416 -1.5569 -2.0392E-12" />
+    <parent
+      link="Gripper_Servo_Gear" />
+    <child
+      link="Tip_Gripper_Servo" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="1.3"
+      effort="5.0"
+      velocity="1.0" />
+    <mimic joint="Gripper_Servo_Gear_Joint" multiplier="1" offset="0"/> 
+  </joint>
+  <link
+    name="Gripper_Idol_Gear">
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Gripper_Idol_Gear.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.058824 0.64706 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Gripper_Idol_Gear_col.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Gripper_Idol_Gear_Joint"
+    type="revolute">
+    <origin
+      xyz="-0.052696 -0.01387 0.038065"
+      rpy="2.2091 -0.040996 1.626" />
+    <parent
+      link="Link_5" />
+    <child
+      link="Gripper_Idol_Gear" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.5707"
+      upper="0"
+      effort="5.0"
+      velocity="1.0" />
+  </joint>
+  <link
+    name="Tip_Gripper_Idol">
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Tip_Gripper_Idol.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Tip_Gripper_Idol_col.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Tip_Gripper_Idol_Joint"
+    type="revolute">
+    <origin
+      xyz="-0.039906 -0.000125 -0.0027473"
+      rpy="3.1416 0.5236 3.1416" />
+    <parent
+      link="Gripper_Idol_Gear" />
+    <child
+      link="Tip_Gripper_Idol" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.5"
+      upper="0.0"
+      effort="5.0"
+      velocity="1.0" />
+    <mimic joint="Gripper_Idol_Gear_Joint" multiplier="-1" offset="0"/>
+  </joint>
+  <link
+    name="Pivot_Arm_Gripper_Servo">
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Pivot_Arm_Gripper_Servo.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Pivot_Arm_Gripper_Servo_col.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Pivot_Arm_Gripper_Servo_Joint"
+    type="revolute">
+    <origin
+      xyz="-0.068745 0.00713 0.05"
+      rpy="0.93142 -0.0083007 -1.582" />
+    <parent
+      link="Link_5" />
+    <child
+      link="Pivot_Arm_Gripper_Servo" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.5707"
+      upper="1.5707"
+      effort="5.0"
+      velocity="1.0" />
+    <mimic joint="Gripper_Servo_Gear_Joint" multiplier="1" offset="0"/> 
+  </joint>
+  <link
+    name="Pivot_Arm_Gripper_Idol">
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Pivot_Arm_Gripper_Idol.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/Pivot_Arm_Gripper_Idol_col.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Pivot_Arm_Gripper_Idol_Joint"
+    type="revolute">
+    <origin
+      xyz="-0.06867 -0.00687 0.0501"
+      rpy="0.93138 1.7645E-12 -1.5708" />
+    <parent
+      link="Link_5" />
+    <child
+      link="Pivot_Arm_Gripper_Idol" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-1.5707"
+      upper="1.5707"
+      effort="5.0"
+      velocity="1.0" />
+    <mimic joint="Gripper_Idol_Gear_Joint" multiplier="1" offset="0"/> 
+  </joint>
+  <!--
+  <gazebo>
+    <plugin name="MimicJointPlugin" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
+      joint="Gripper_Idol_Gear_Joint"
+      mimicJoint="Pivot_Arm_Gripper_Idol_Joint"
+      multiplier="1"
+      offset="0"
+    </plugin>
+    <plugin name="MimicJointPlugin" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
+      joint="Gripper_Servo_Gear_Joint"
+      mimicJoint="Pivot_Arm_Gripper_Servo_Joint"
+      multiplier="1"
+      offset="0"
+    </plugin>
+    <plugin name="MimicJointPlugin" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
+      joint="Gripper_Servo_Gear_Joint"
+      mimicJoint="Tip_Gripper_Servo_Joint
+      multiplier="1"
+      offset="0"
+    </plugin>
+    <plugin name="MimicJointPlugin" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
+      joint="Gripper_Idol_Gear_Joint"
+      mimicJoint="Tip_Gripper_Idol_Joint
+      multiplier="-1"
+      offset="0"
+    </plugin>
+  </gazebo>
+  -->
+</robot>

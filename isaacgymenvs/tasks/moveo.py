@@ -1,30 +1,3 @@
-# Copyright (c) 2018-2023, NVIDIA Corporation
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#
-# 1. Redistributions of source code must retain the above copyright notice, this
-#    list of conditions and the following disclaimer.
-#
-# 2. Redistributions in binary form must reproduce the above copyright notice,
-#    this list of conditions and the following disclaimer in the documentation
-#    and/or other materials provided with the distribution.
-#
-# 3. Neither the name of the copyright holder nor the names of its
-#    contributors may be used to endorse or promote products derived from
-#    this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import numpy as np
 import os
@@ -33,25 +6,16 @@ import torch
 from isaacgym import gymutil, gymtorch, gymapi
 from .base.vec_task import VecTask
 
-class Cartpole(VecTask):
+class Moveo(VecTask):
 
     def __init__(self, cfg, rl_device, sim_device, graphics_device_id, headless, virtual_screen_capture, force_render):
         self.cfg = cfg
-
         self.reset_dist = self.cfg["env"]["resetDist"]
 
         self.max_push_effort = self.cfg["env"]["maxEffort"]
         self.max_episode_length = 500
 
-        self.cfg["env"]["numObservations"] = 4
-        self.cfg["env"]["numActions"] = 1
-
         super().__init__(config=self.cfg, rl_device=rl_device, sim_device=sim_device, graphics_device_id=graphics_device_id, headless=headless, virtual_screen_capture=virtual_screen_capture, force_render=force_render)
-
-        dof_state_tensor = self.gym.acquire_dof_state_tensor(self.sim)
-        self.dof_state = gymtorch.wrap_tensor(dof_state_tensor)
-        self.dof_pos = self.dof_state.view(self.num_envs, self.num_dof, 2)[..., 0]
-        self.dof_vel = self.dof_state.view(self.num_envs, self.num_dof, 2)[..., 1]
 
     def create_sim(self):
         # set the up axis to be z-up given that assets are y-up by default
@@ -73,7 +37,7 @@ class Cartpole(VecTask):
         upper = gymapi.Vec3(0.5 * spacing, spacing, spacing)
 
         asset_root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../assets")
-        asset_file = "urdf/cartpole.urdf"
+        asset_file = "urdf/moveo.urdf"
 
         if "asset" in self.cfg["env"]:
             asset_root = os.path.join(os.path.dirname(os.path.abspath(__file__)), self.cfg["env"]["asset"].get("assetRoot", asset_root))
@@ -97,27 +61,26 @@ class Cartpole(VecTask):
             pose.p.y = 2.0
             pose.r = gymapi.Quat(-np.sqrt(2)/2, 0.0, 0.0, np.sqrt(2)/2)
 
-        self.cartpole_handles = []
+        self.actor_handles = []
         self.envs = []
         for i in range(self.num_envs):
             # create env instance
             env_ptr = self.gym.create_env(
                 self.sim, lower, upper, num_per_row
             )
-            cartpole_handle = self.gym.create_actor(env_ptr, cartpole_asset, pose, "cartpole", i, 1, 0)
+            actor_handle = self.gym.create_actor(env_ptr, cartpole_asset, pose, "cartpole", i, 1, 0)
 
-            dof_props = self.gym.get_actor_dof_properties(env_ptr, cartpole_handle)
+            dof_props = self.gym.get_actor_dof_properties(env_ptr, actor_handle)
             dof_props['driveMode'][0] = gymapi.DOF_MODE_EFFORT
             dof_props['driveMode'][1] = gymapi.DOF_MODE_NONE
             dof_props['stiffness'][:] = 0.0
             dof_props['damping'][:] = 0.0
-            self.gym.set_actor_dof_properties(env_ptr, cartpole_handle, dof_props)
+            self.gym.set_actor_dof_properties(env_ptr, actor_handle, dof_props)
 
             self.envs.append(env_ptr)
-            self.cartpole_handles.append(cartpole_handle)
+            self.actor_handles.append(actor_handle)
 
     def compute_reward(self):
-        return
         # retrieve environment observations from buffer
         pole_angle = self.obs_buf[:, 2]
         pole_vel = self.obs_buf[:, 3]
@@ -135,10 +98,10 @@ class Cartpole(VecTask):
 
         self.gym.refresh_dof_state_tensor(self.sim)
 
-        # self.obs_buf[env_ids, 0] = self.dof_pos[env_ids, 0].squeeze()
-        # self.obs_buf[env_ids, 1] = self.dof_vel[env_ids, 0].squeeze()
-        # self.obs_buf[env_ids, 2] = self.dof_pos[env_ids, 1].squeeze()
-        # self.obs_buf[env_ids, 3] = self.dof_vel[env_ids, 1].squeeze()
+        self.obs_buf[env_ids, 0] = self.dof_pos[env_ids, 0].squeeze()
+        self.obs_buf[env_ids, 1] = self.dof_vel[env_ids, 0].squeeze()
+        self.obs_buf[env_ids, 2] = self.dof_pos[env_ids, 1].squeeze()
+        self.obs_buf[env_ids, 3] = self.dof_vel[env_ids, 1].squeeze()
 
         return self.obs_buf
 
@@ -158,12 +121,14 @@ class Cartpole(VecTask):
         self.progress_buf[env_ids] = 0
 
     def pre_physics_step(self, actions):
+        return
         actions_tensor = torch.zeros(self.num_envs * self.num_dof, device=self.device, dtype=torch.float)
         actions_tensor[::self.num_dof] = actions.to(self.device).squeeze() * self.max_push_effort
         forces = gymtorch.unwrap_tensor(actions_tensor)
         self.gym.set_dof_actuation_force_tensor(self.sim, forces)
 
     def post_physics_step(self):
+        return
         self.progress_buf += 1
 
         env_ids = self.reset_buf.nonzero(as_tuple=False).squeeze(-1)
